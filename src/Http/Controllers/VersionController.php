@@ -9,11 +9,15 @@ class VersionController
 {
     public function __invoke(Request $request, Response $response): Response
     {
-        $data = [
-            'name' => env('API_NAME'),
-            'version' => env('API_VERSION')
-        ];
 
+        try {           
+            $data = [
+                'name' => env('API_NAME'),
+                'version' => env('API_VERSION')
+            ];
+        } catch (\Exception $ex) {            
+            $data = "Ocurrio una excepcion - Error: {$ex->getMessage()}";
+        }
         $response->getBody()->write(json_encode($data));
 
         return $response->withStatus(200, 'OK')

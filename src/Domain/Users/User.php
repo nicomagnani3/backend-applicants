@@ -23,6 +23,9 @@ class User
         $this->type = $type;
         $this->profile = $profile;
     }
+   
+
+    
 
     public function getId(): Id
     {

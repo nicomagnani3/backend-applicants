@@ -22,6 +22,7 @@ $container = new Container();
 $container->set(LocalUsersRepository::class, function () {
     return new LocalUsersRepository();
 });
+
 $container->set(GitHubUsersRepository::class, function () {
     return new GitHubUsersRepository();
 });
@@ -29,12 +30,18 @@ $container->set(GitHubUsersRepository::class, function () {
 // application
 AppFactory::setContainer($container);
 $app = AppFactory::create();
+$app->addErrorMiddleware(true, true, true);
 $app->add(new WhoopsMiddleware(['enable' => env('API_ENV') === 'local']));
 
+
 // routes
+
 $app->get('/', VersionController::class);
 $app->get('/users', FindUsersController::class);
 $app->get('/users/{type}/{login}', ShowUserController::class);
 $app->post('/users', StoreUserController::class);
-
-$app->run();
+try {
+    $app->run();
+} catch (Exception $e) {
+    die(json_encode(array("status" => "failed", "message" => "This action is not allowed")));
+}

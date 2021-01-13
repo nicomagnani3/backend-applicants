@@ -11,4 +11,7 @@ interface UsersRepository
     public function getByLogin(Login $login, int $limit = 0): User;
 
     public function add(User $user): void;
+
+    public function ultimoId():String;
+    
 }
